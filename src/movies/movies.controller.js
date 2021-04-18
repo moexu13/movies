@@ -18,8 +18,16 @@ const theatersShowingMovie = async (req, res) => {
 }
 
 const movieReviews = async (req, res) => {
-  const response = await service.movieReviews(res.locals.movie.movie_id);
-  res.json({ data: response });
+  const methodName = "movies.movieReviews";
+  const reviews = await service.movieReviews(res.locals.movie.movie_id);
+  req.log.debug({ __filename, methodName, reviews });
+  
+  for (const review of reviews) {
+    review.critic = await service.movieCritics(review.critic_id);
+  }
+  req.log.debug({ reviews });
+  
+  res.json({ data: reviews });
 }
 
 const read = async (req, res) => {
@@ -29,8 +37,8 @@ const read = async (req, res) => {
 
 const list = async (req, res) => {
   const { is_showing } = req.query;
-  // const methodName = "movies list";
-  // req.log.debug({ __filename, methodName, query: req.query });
+  const methodName = "movies list";
+  req.log.debug({ __filename, methodName, query: req.query });
 
   let response;
   if (!is_showing) {
@@ -39,7 +47,7 @@ const list = async (req, res) => {
     response = await service.moviesInTheaters();
   }
 
-  // req.log.debug({ "response": response });
+  req.log.debug({ "response": response });
   res.json({ data: response });
 }
 
