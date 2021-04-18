@@ -1,7 +1,7 @@
 const pinoHttp = require("pino-http");
 const { nanoid } = require("nanoid");
 
-const level = process.env.LOG_LEVEL || "debug";
+const level = process.env.LOG_LEVEL || "error";
 
 const nodeEnv = process.env.NODE_ENV || "development";
 const prettyPrint = nodeEnv === "development";

@@ -117,4 +117,4 @@ dist
 
 .DS_Store
 .qualified-attach.json
-.env*
+.env
