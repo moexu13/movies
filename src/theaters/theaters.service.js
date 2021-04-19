@@ -8,9 +8,9 @@ const list = () => {
 
 const moviesInTheaters = theaterId => {
   return knex("movies as m")
+    .select("m.*")
     .join("movies_theaters as mt", "m.movie_id", "mt.movie_id")
-    .where("mt.theater_id", theaterId)
-    .select("m.*");
+    .where("mt.theater_id", theaterId);
 }
 
 module.exports = {

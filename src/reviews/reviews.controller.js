@@ -12,8 +12,11 @@ const reviewExists = async (req, res, next) => {
   return next({ status: 404, message: "Review cannot be found."});
 }
 
-const fillInTheBlanks = (req, res, updatedReview) => {
+const createUpdatedReview = (req, res, updatedReview) => {
   const currentReview = res.locals.review;
+  const methodName = "reviews.createUpdatedReview";
+  req.log.debug({ __filename, methodName, updatedReview: updatedReview });
+
   const currentKeys = Object.keys(currentReview);
   const updatedKeys = Object.keys(updatedReview);
   updatedKeys.forEach(key => {
@@ -21,20 +24,21 @@ const fillInTheBlanks = (req, res, updatedReview) => {
       currentReview[key] = updatedReview[key];
     } 
   });
+
+  req.log.debug({ __filename, methodName, currentReview: currentReview });
   return currentReview;
 }
 
 const update = async (req, res) => {
   const updatedReview = { ...req.body.data };
-  const methodName = "review.update";
+  const methodName = "reviews.update";
   req.log.debug({ __filename, methodName, body: req.body });
     
-  const review = fillInTheBlanks(req, res, updatedReview);
+  const review = createUpdatedReview(req, res, updatedReview);
   await service.update(review);
   req.log.debug({ __filename, methodName, review });
   
   review.critic = await criticsService.read(review.critic_id);
-  console.log("review", review);
 
   res.json({ data: review });
 }

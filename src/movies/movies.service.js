@@ -2,18 +2,18 @@ const knex = require("../db/connection");
 
 const moviesInTheaters = () => {
   return knex("movies as m")
+    .distinct("m.*")
     .join("movies_theaters as mt", "m.movie_id", "mt.movie_id")
-    .where("mt.is_showing", true)
-    .distinct("m.*");
+    .where("mt.is_showing", true);
 }
 
 const theatersShowingMovie = movieId => {
   return knex("theaters as t")
+    .select("t.*", "mt.is_showing", "mt.movie_id")
+    .distinct("t.theater_id")
     .join("movies_theaters as mt", "movie_id", movieId)
     .where("mt.movie_id", movieId)
-    .andWhere("mt.is_showing", true)
-    .distinct("t.theater_id")
-    .select("t.*", "mt.is_showing", "mt.movie_id");
+    .andWhere("mt.is_showing", true);
 }
 
 const movieReviews = movieId => {
