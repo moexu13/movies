@@ -20,10 +20,6 @@ const movieReviews = movieId => {
   return knex("reviews").select("*").where("movie_id", movieId);
 }
 
-const movieCritics = criticId => {
-  return knex("critics").select("*").where("critic_id", criticId).first();
-}
-
 const read = movieId => {
   return knex("movies")
     .select("*")
@@ -38,7 +34,6 @@ const list = () => {
 module.exports = {
   moviesInTheaters,
   theatersShowingMovie,
-  movieCritics,
   movieReviews,
   list,
   read,

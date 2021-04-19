@@ -1,4 +1,5 @@
 const service = require("./movies.service");
+const criticsService = require("../critics/critics.service");
 const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
 
 const movieExists = async (req, res, next) => {
@@ -23,7 +24,7 @@ const movieReviews = async (req, res) => {
   req.log.debug({ __filename, methodName, reviews });
   
   for (const review of reviews) {
-    review.critic = await service.movieCritics(review.critic_id);
+    review.critic = await criticsService.read(review.critic_id);
   }
   req.log.debug({ reviews });
   
